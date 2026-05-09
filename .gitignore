@@ -1,0 +1,5 @@
+trained_model/
+__pycache__/
+*.h5
+.DS_Store
+plant_disease_dataset.pdf
