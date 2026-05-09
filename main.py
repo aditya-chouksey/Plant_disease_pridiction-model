@@ -24,13 +24,12 @@ if not os.path.exists(model_path):
                 config_str = model_config.decode('utf-8') if isinstance(model_config, bytes) else model_config
                 config_dict = json.loads(config_str)
                 
-                modified = False
+                modified = [False]
                 def remove_quant_config(config):
-                    nonlocal modified
                     if isinstance(config, dict):
                         if 'quantization_config' in config:
                             del config['quantization_config']
-                            modified = True
+                            modified[0] = True
                         for k, v in list(config.items()):
                             remove_quant_config(v)
                     elif isinstance(config, list):
@@ -38,7 +37,7 @@ if not os.path.exists(model_path):
                             remove_quant_config(item)
 
                 remove_quant_config(config_dict)
-                if modified:
+                if modified[0]:
                     new_config_str = json.dumps(config_dict)
                     if isinstance(model_config, bytes):
                         new_config_str = new_config_str.encode('utf-8')
